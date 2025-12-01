@@ -3,19 +3,13 @@ fn get_data_vec() -> Vec<(char, u16)> {
     fs::read_to_string("src/input.txt")
         .expect("Error reading file")
         .trim()
-        .parse::<String>()
-        .expect("Error parsing file to string!")
         .split("\n")
         .map(|line| {
+            let (first, rest) = line.split_at(1);
+
             (
-                line.get(0..1)
-                    .expect("Error getting &str at 0..1")
-                    .parse::<char>()
-                    .expect("Error parsing &str to char"),
-                line.get(1..)
-                    .expect("Error getting &str at 1..")
-                    .parse::<u16>()
-                    .expect("Error parsing &str to u16")
+                first.chars().next().unwrap(),
+                rest.parse::<u16>().expect("Error parsing number")
             )
         })
         .collect::<Vec<(char, u16)>>()

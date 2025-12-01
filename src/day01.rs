@@ -3,14 +3,12 @@ fn get_data_vec() -> Vec<(char, u16)> {
     fs::read_to_string("src/input.txt")
         .expect("Error reading file")
         .trim()
-        .split("\n")
+        .lines()
         .map(|line| {
             let (first, rest) = line.split_at(1);
-
-            (
-                first.chars().next().unwrap(),
-                rest.parse::<u16>().expect("Error parsing number")
-            )
+            let dir = first.chars().next().unwrap();
+            let num = rest.parse::<u16>().expect("Error parsing number");
+            (dir, num)
         })
         .collect::<Vec<(char, u16)>>()
 }

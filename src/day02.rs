@@ -5,37 +5,22 @@ fn get_data_vec() -> Vec<(u64, u64)> {
         .trim()
         .split(',')
         .map(|pair| {
-            let mut nums = pair.split('-');
+            let (first, second) = pair.split_once('-').expect("Invalid format");
 
-            let first = nums.next()
-                .expect("Failed getting first number")
-                .parse::<u64>()
-                .expect("First number not a number");
-
-            let second = nums.next()
-                .expect("Failed getting second number")
-                .parse::<u64>()
-                .expect("Second number not a number");
-
-            (first, second)
+            (
+                first.parse().expect("First num is invalid"),
+                second.parse().expect("Second num is invalid")
+            )
         })
         .collect()
 }
 
-pub(crate) fn part1() -> u64 {
-    let data_vec: Vec<(u64, u64)> = get_data_vec();
-
-
-    let mut count: u64 = 0;
-    for (first, second) in data_vec.iter() {
-        for i in *first..*second + 1 {
-            if check_symmetry_p1(i) {
-                count += i;
-            }
-        }
-    }
-
-    count
+pub fn part1() -> u64 {
+    get_data_vec()
+        .iter()
+        .flat_map(|&(first, second)| first..=second)
+        .filter(|&num| check_symmetry_p1(num))
+        .sum()
 }
 
 fn check_symmetry_p1(num: u64) -> bool {
@@ -50,27 +35,18 @@ fn check_symmetry_p1(num: u64) -> bool {
     first == second
 }
 
-pub(crate) fn part2() -> u64 {
-    let data_vec: Vec<(u64, u64)> = get_data_vec();
-
-
-    let mut count: u64 = 0;
-    for (first, second) in data_vec.iter() {
-        for i in *first..*second + 1 {
-            if check_symmetry_p2(i) {
-                dbg!(i);
-                count += i;
-            }
-        }
-    }
-
-    count
+pub fn part2() -> u64 {
+    get_data_vec()
+        .iter()
+        .flat_map(|&(first, second)| first..=second)
+        .filter(|&num| check_symmetry_p2(num))
+        .sum()
 }
 
 fn check_symmetry_p2(num: u64) -> bool {
     let str_of_num = num.to_string();
 
-    'outer: for i in 1..str_of_num.len() / 2 + 1 {
+    'outer: for i in 1..=str_of_num.len() / 2 {
         if str_of_num.len() % i != 0 {
             continue;
         }
